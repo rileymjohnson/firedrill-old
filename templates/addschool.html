@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Fire Drill</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-toggle.min.css">
+    <link rel="stylesheet" href="../static/css/personal/style.css">
+    <link rel="icon" type="image/png" href="http://www.forkvfd.com/wp-content/uploads/2012/03/1331348846_fire.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../static/js/toast.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <style>
+        [contenteditable=true]:empty:before{
+          content: attr(placeholder);
+          display: block; /* For Firefox */
+        }
+
+        /* */
+
+        div[contenteditable=true] {
+          width: 290px;
+          padding: 5px;
+        }
+        .removeButton {
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/admin">Admin Panel</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/admin/stats">Stats</a>
+                    </li>
+                    <li><a href="/admin/management">Management</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Zones <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/admin/addzone">Add Zone</a>
+                            </li>
+                            <li><a href="/admin/deletezone">Delete Zone</a>
+                            </li>
+                        </ul>
+                    </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Teachers <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/admin/addteacher">Add Teacher</a>
+                                </li>
+                                <li><a href="/admin/deleteteacher">Delete Teacher</a>
+                                </li>
+                                <li><a href="/admin/modifyteacher">Modify Teacher</a>
+                                </li>
+                            </ul>
+                        </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Schools <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/admin/addschool">Add School</a>
+                            </li>
+                            <li><a href="/admin/deleteschool">Delete School</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown dropdown-fix">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manage <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/">Home</a>
+                            </li>
+                            <li><a href="/logout?i=admin">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2>Add A School</h2>
+            </div>
+            <div class="panel-body">
+                <form id="form">
+                    <div class="form-group">
+                        <label for="sel1">School Name:</label>
+                        <input type="text" placeholder="name" id="_name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="sel1">School Identifier *this is in the url and only allows letters:</label>
+                        <input type="text" placeholder="identifier" id="school" class="form-control alphaonly">
+                    </div>
+                    <div class="form-group">
+                        <label for="sel1">Password:</label>
+                        <input type="password" placeholder="password" id="_pass" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="sel1">Retype Password:</label>
+                        <input type="password" placeholder="retype password" id="_retype" class="form-control">
+                    </div>
+                    <hr>
+                    <label>Include one zone now and you can add the rest later</label>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Firstname</th>
+                                    <th>Lastname</th>
+                                    <th>Room Number</th>
+                                    <th style="width: 50px;">
+                                        <span class="glyphicon glyphicon-plus removeButton" aria-hidden="true" onclick="addRow()"></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <div id="resetdiv">
+                            <tbody id="tbody">
+                                <tr class="warning">
+                                    <td>John (example)</td>
+                                    <td>Doe (example)</td>
+                                    <td>A244 (example)</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" class="form-control" placeholder="First Name"></td>
+                                    <td><input type="text" class="form-control" placeholder="Last Name"></td>
+                                    <td><input type="text" class="form-control" placeholder="Room Number"></td>
+                                    <td>
+                                        <span class='glyphicon glyphicon-remove removeButton' aria-hidden='true' onclick='removeRow(this)'></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            </div>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" class="btn btn-primary" onclick="go()" value="submit" id="submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    $('.alphaonly').bind('keyup blur',function(){ 
+        var node = $(this);
+        node.val(node.val().replace(/[^a-z]/g,'') ); }
+    );
+    </script>
+    <script>
+        function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+        function removeRow(item) {
+            var elem = item.parentNode.parentNode
+            elem.parentNode.removeChild(elem)
+        }
+        function addRow() {
+            var row = "<tr><td><input type='text' class='form-control' placeholder='First Name'></td><td><input type='text' class='form-control' placeholder='Last Name'></td><td><input type='text' class='form-control' placeholder='Room Number'></td><td><span class='glyphicon glyphicon-remove removeButton' aria-hidden='true' onclick='removeRow(this)'></span></td></tr>"
+            $("#tbody").append(row);
+        }
+        function go() {
+            if ($("#_pass").val() == $("#_retype").val() && $("#_pass").val().length > 7) {
+                if ($("#_name").val() && $("#school").val() && $("#tbody").children().length > 1) {
+                    var teachers = []
+                    var table = $("#tbody").children()
+                    for (var i = 1; i < table.length; i++) {
+                        var row = $(table[i]);
+                        var first = $($(row.children()[0]).children()[0]).val();
+                        var last = $($(row.children()[1]).children()[0]).val();
+                        var room = $($(row.children()[2]).children()[0]).val();
+                        if (first.length < 1) {
+                            $.toaster('The form is filled out incorrectly', 'Error', 'danger');
+                            return;
+                        }
+                        if (last.length < 1) {
+                            $.toaster('The form is filled out incorrectly', 'Error', 'danger');
+                            return;
+                        }
+                        if (room.length < 1) {
+                            $.toaster('The form is filled out incorrectly', 'Error', 'danger');
+                            return;
+                        }
+                        teachers.push({
+                            first: first,
+                            last: last,
+                            room: room
+                        })
+                    } 
+                    $.post( "/api/addteacher", {teachers: JSON.stringify(teachers), school: $("#school").val(), name: toTitleCase($("#_name").val()), password: $("#_pass").val()}, function( data ) {
+                        if (data == "true") {
+                            $.toaster('A school has been successfully added', 'Success', 'success');
+                            $("#form")[0].reset()
+                            $("#tbody").html("<tr class='warning'><td>John (example)</td><td>Doe (example)</td><td>A244 (example)</td><td></td></tr><tr><td><input type='text' class='form-control' placeholder='First Name'></td><td><input type='text' class='form-control' placeholder='Last Name'></td><td><input type='text' class='form-control' placeholder='Room Number'></td><td><span class='glyphicon glyphicon-remove removeButton' aria-hidden='true' onclick='removeRow(this)'></span></td></tr>")
+                        } else if (data == "used") {
+                            $.toaster('This identifier has already been used', 'Error', 'danger');
+                        } else {
+                            $.toaster('There was an error in adding the zone', 'Error', 'danger');
+                        }
+                    });
+                } else {
+                    $.toaster('The form is filled out incorrectly', 'Error', 'danger');
+                }
+            } else {
+                $.toaster('The passwords do not meet the requirements', 'Error', 'danger');
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fire Drill</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/css/bootstrap-toggle.min.css">
+  <link rel="stylesheet" href="../static/css/personal/style.css">
+  <link rel="icon" type="image/png" href="http://www.forkvfd.com/wp-content/uploads/2012/03/1331348846_fire.png">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="../static/js/toast.js"></script>
+  <script src="../static/js/bootstrap.min.js"></script>
+  <style>
+      .log {
+        width: 40%;
+        position: absolute;
+        top: 50%;
+        left: 30%;
+        height: 180px;
+        margin-top: -90px;
+      }
+      .btn-top {
+        margin-top: 10px;
+      }
+      @media screen and (max-width: 768px) {
+        .log {
+            width: 100%;
+            left: 0;
+        }
+    }
+  </style>
+</head>
+<body>
+    <div class="log">
+        <form class="form-signin" method="post" action="/adminlogin">
+        <h2 class="form-signin-heading">Admin Log in</h2>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" autofocus>
+        <button class="btn btn-lg btn-primary btn-block btn-top" type="submit">Log in</button>
+      </form>
+    </div>
+    {% if bad %}
+    <script>
+        $( document ).ready(function() {
+            $.toaster('The password is incorrect', 'Error', 'danger');
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

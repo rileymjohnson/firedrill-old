@@ -1,0 +1,38 @@
+.upper {
+    text-transform: uppercase;
+}
+.progress {
+    height: 25px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+.quick .toggle-group {
+    transition: none;
+    -webkit-transition: none;
+}
+.buttons {
+    margin-bottom: 20px;
+}
+.dropdown-menu-cust {
+    left: 50% !important;
+    margin-left: -55px;
+}
+.switchPanel {
+    display: none;
+}
+.shown {
+    display: block;
+}
+.toggle {
+    width: 87px !important;
+}
+.dropButton {
+    cursor: pointer;
+}
+.dropdown-fix {
+    margin-right: -15px;
+}
+.label-as-badge {
+    border-radius: 1em;
+    float: right;
+}

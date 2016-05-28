@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fire Drill</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/css/bootstrap-toggle.min.css">
+  <link rel="stylesheet" href="../static/css/personal/style.css">
+  <link rel="icon" type="image/png" href="http://www.forkvfd.com/wp-content/uploads/2012/03/1331348846_fire.png">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="../static/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Fire Drill</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown dropdown-fix">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manage <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/adminlogin">Admin Panel</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Schools</div>
+              <div class="panel-body">
+                <div class="list-group">
+                    {% for link in vals %}
+                    <a href="login?school={{ link[3] }}" class="list-group-item">{{ link[0] }}<span class="label label-success label-as-badge">{{ link[2] }}%</span></a>
+                    {% endfor %}
+                </div>
+              </div>
+            </div>
+        </div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fire Drill</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/css/bootstrap-toggle.min.css">
+  <link rel="stylesheet" href="../static/css/personal/style.css">
+  <link rel="icon" type="image/png" href="http://www.forkvfd.com/wp-content/uploads/2012/03/1331348846_fire.png">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="../static/js/toast.js"></script>
+  <script src="../static/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/admin">Admin Panel</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="/admin/stats">Stats</a></li>
+            <li class="active"><a href="/admin/management">Management</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Zones <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/admin/addzone">Add Zone</a></li>
+                <li><a href="/admin/deletezone">Delete Zone</a></li>
+              </ul>
+              <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Teachers <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/admin/addteacher">Add Teacher</a></li>
+                <li><a href="/admin/deleteteacher">Delete Teacher</a></li>
+                  <li><a href="/admin/modifyteacher">Modify Teacher</a></li>
+              </ul>
+            </li>
+	    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Schools <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/admin/addschool">Add School</a>
+                            </li>
+                            <li><a href="/admin/deleteschool">Delete School</a>
+                            </li>
+                        </ul>
+                    </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown dropdown-fix">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manage <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/logout?i=admin">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                  <h2>Change Passwords</h2>
+                </div>
+              <div class="panel-body">
+                <form action="/admin/management" method="post" id="form">
+                    <div class="form-group">
+                      <label for="sel1">Select school/admin:</label>
+                      <select class="form-control" id="schools" name="school">
+                        <option selected disabled value="">Choose School</option>
+                        <option value="admin">Admin</option>
+                          {% for i in schools%}
+                        <option value="{{ i['id'] }}">{{ i['name'] }}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="usr">New Password *must be 8 characters or more:</label>
+                      <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                    <div class="form-group">
+                      <label for="pwd">Retype:</label>
+                      <input type="password" class="form-control" id="retype">
+                    </div>
+                    <div class="form-group">
+                        <input type="reset" value="reset" class="btn btn-danger">
+                        <input type="button" class="btn btn-primary" value="submit" onclick="go()">
+                    </div>
+                    {% if up %}
+                    <div class="alert alert-success alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  Password successfully updated
+</div>
+                    {% endif %}
+                  </form>
+                </div>
+            </div>
+        </div>
+    <script>
+        function go() {
+            if ($("#password").val() == $("#retype").val() && $("#password").val().length > 7 && $('#schools').val()) {
+                $("#form").submit()
+            }
+            else {
+                $.toaster('Please fill out the form', 'Error', 'danger');
+            }
+        }
+    </script>
+</body>
+</html>

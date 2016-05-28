@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fire Drill</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/css/bootstrap-toggle.min.css">
+  <link rel="stylesheet" href="../static/css/bootstrap-select.css">
+  <link rel="stylesheet" href="../static/css/personal/style.css">
+  <link rel="icon" type="image/png" href="http://www.forkvfd.com/wp-content/uploads/2012/03/1331348846_fire.png">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="../static/js/toast.js"></script>
+  <script src="../static/js/bootstrap.min.js"></script>
+  <script src="../static/js/bootstrap-select.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/admin">Admin Panel</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="/admin/stats">Stats</a></li>
+            <li><a href="/admin/management">Management</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Zones <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/admin/addzone">Add Zone</a></li>
+                <li><a href="/admin/deletezone">Delete Zone</a></li>
+              </ul>
+              <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Teachers <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/admin/addteacher">Add Teacher</a></li>
+                <li><a href="/admin/deleteteacher">Delete Teacher</a></li>
+                  <li><a href="/admin/modifyteacher">Modify Teacher</a></li>
+              </ul>
+            </li>
+	    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Schools <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/admin/addschool">Add School</a>
+                            </li>
+                            <li><a href="/admin/deleteschool">Delete School</a>
+                            </li>
+                        </ul>
+                    </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown dropdown-fix">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manage <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/logout?i=admin">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                  <h2>Delete A Teacher</h2>
+                </div>
+              <div class="panel-body">
+                <div class="form-group">
+                    <label>Choose School:</label>
+                    <select class="form-control" id="schools">
+                        <option selected disabled value="">Choose School</option>
+                        {% for i in schools %}
+                        <option value="{{ i['id'] }}">{{ i['name'] }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group" id="zonediv">
+                      
+                  </div>
+                  <div class="form-group" id="teacherdiv">
+                      
+                  </div>
+                  <div class="form-group" id="submitdiv" style="display: none">
+                      <input type="button" onclick="go()" value="Submit" class="btn btn-primary">
+                  </div>
+            </div>
+        </div>
+        <script>
+            function go() {
+                var school = $("#schools").val();
+                var zone = $("#zones").val();
+                var teacher = $("#teachers").val();
+                if (school && zone && teacher) {
+                    var table = school + zone;
+                    $.post("/api/getteachers", {zone: table, teacher: teacher}, function(data) {
+                        if (data == "true") {
+                            $.toaster('The teacher was deleted', 'Success', 'success');
+                        } else {
+                            $.toaster('The teacher could not be deleted', 'Error', 'danger');
+                        }
+                    });
+                } else {
+                    $.toaster('The form was not filled out properly', 'Error', 'danger');
+                }
+                $("#zonediv").html("");
+                $("#teacherdiv").html("");
+                $('#schools').val(function() {
+                    return this.defaultValue;
+                });
+            }
+            $("#schools").change(function() {
+            $("#teacherdiv").html("");
+            $.get("/api/getzones", {school: $("#schools").val()}, function(undata) {
+                var select = "<label>Choose Zone:</label><select id='zones' class='form-control' onchange='zoneSelected()'><option selected disabled value=''>Choose Zone</option>"
+                var data = JSON.parse(undata)
+                for (var i=0; i< data.length; i++) {
+                    var zone = data[i]['zone'].slice(-1);
+                    select += "<option value='" + zone + "'>Zone " + zone.toUpperCase() + "</option>";
+                }
+                select += "</select>"
+                $("#zonediv").html(select);
+            });
+        });
+        function zoneSelected() {
+            $.get("/api/getteachers", {zone: $("#schools").val() + $("#zones").val()}, function(undata) {
+                var select = "<label>Choose Teacher:</label><select class='selectpicker' data-live-search='true' data-width='100%' id='teachers'><option selected disabled value=''>Choose Teacher</option>"
+                var data = JSON.parse(undata)
+                for (var i = 0; i < data.length; i++) {
+                    select += "<option value='" + data[i]['id'] + "'>" + data[i]['name'] + "</option>";
+                }
+                select += "</select>"
+                $("#teacherdiv").html(select)
+                $('#teachers').selectpicker('render');
+                $("#submitdiv").show()
+            });
+        }
+        </script>
+</body>
+</html>
